@@ -1,1 +1,3 @@
-
+How to free hosting in github
+settings>>pages>>branch(make main) like main/root>>save
+https://rony7s.github.io/web1
