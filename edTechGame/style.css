@@ -1,0 +1,38 @@
+.gameBord{
+    width: 500px;
+    margin: 0 auto;
+}
+
+table,
+td,
+th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.item_name {
+    border-radius: 25px; 
+    background:green; 
+    width: 160px; 
+    height: 120px; 
+    font-size: 25px; 
+    color: white; 
+    text-align: center; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.item_move , .item_now{
+    border-radius: 25px;
+    background: #ddd;
+    padding: 10px;
+    width: 145px;
+    height: 120px;
+} 
+
+.img_item{
+    width: 140px;
+    height:90px;
+    margin: 5px;
+}
