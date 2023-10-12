@@ -12,8 +12,8 @@ function drop(ev) {
     ev.target.appendChild(document.getElementById(data));
 }
  
-let ri = "<img src=\'img/r.jpg\' width=\'140px\' height=\'100px\'>";
-let wr = "<img src=\'img/w.jpg\' width=\'140px\' height=\'100px\'>";
+let ri = "<img src=\'img/r.jpg\' class='img_item'>";
+let wr = "<img src=\'img/w.jpg\' class='img_item'>";
 
 let item_now1 = document.getElementById('item_now1');
 let item_now2 = document.getElementById('item_now2');
@@ -25,7 +25,7 @@ let item_now7 = document.getElementById('item_now7');
 let item_now8 = document.getElementById('item_now8');
 
 function submmit(){
-    alert("Do you want final summit");
+    alert("ফলাফল দেখতে চাই । সতর্কতা! সবগুলো বসিয়ে সাবমিট দিন");
      
 
     let drop1 = document.getElementById('drop1');

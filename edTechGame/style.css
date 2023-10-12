@@ -1,9 +1,18 @@
 *{
     padding: 0;
     margin: 0;
+    font-family: Tahoma, sans-serif;
+}
+
+.brand {
+    background-color: #ff169d;
+    color: #d9fbfc;
+    text-align: center;
+    font-size: 30px;
+    line-height: 35px;
+    padding: 20px;
 }
 .gameBord{
-    width: 500px;
     margin: 0 auto;
 }
 
@@ -12,43 +21,50 @@
     padding: 10px;
     font-size: 20px;
     display: block;
-    background-color: green;
-    color: white;
+    font-weight: 900;
+    background-color: #f4008e;
+    color: #d9fbfc;
+    border: 1px solid #ddd;
 }
 #submmit:hover{
-    background-color: red;
+    background-color: #d9fbfc;
+    border: 1px solid #ff169d;
+    color: #ff169d;
+    font-weight: 900;
 }
 
 table,
 td,
 th {
-    border: 1px solid black;
+    border: 1px solid#ff169d;
     border-collapse: collapse;
 }
 
 .item_name {
-    border-radius: 25px; 
-    background:#3f5c8b; 
-    width: 160px; 
-    height: 120px; 
+    background-color: #ff169d;
+    color:#d9fbfc ;
+    border-radius: 20px; 
     font-size: 25px; 
-    color: white; 
     text-align: center; 
     display: flex; 
     justify-content: center;
     align-items: center;
+    width: 160px; 
+    height: 100px; 
+    margin: 10px;
 }
 
-.item_move , .item_now{
-    border-radius: 25px;
+.item_move, .item_now{
+    border-radius: 10px;
     background: #ddd;
-    padding: 10px;
-    width: 145px;
-    height: 120px;
+    width: 160px; 
+    height: 100px; 
+    margin: 10px;
+    
 } 
 
 .img_item{
-    width: 140px;
-    height:90px;
-    margin: 5px;
+    width: 145px;
+    height:85px;
+    margin: 7px;
 }
