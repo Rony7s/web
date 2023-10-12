@@ -1,6 +1,22 @@
+*{
+    padding: 0;
+    margin: 0;
+}
 .gameBord{
     width: 500px;
     margin: 0 auto;
+}
+
+#submmit{
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    display: block;
+    background-color: green;
+    color: white;
+}
+#submmit:hover{
+    background-color: red;
 }
 
 table,
@@ -12,7 +28,7 @@ th {
 
 .item_name {
     border-radius: 25px; 
-    background:green; 
+    background:#3f5c8b; 
     width: 160px; 
     height: 120px; 
     font-size: 25px; 
