@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Table</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container{
+            width: 960px;
+            margin: 0 auto;
+        }
+        .container h1{
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4ab3f0;
+        }
+        .day-header {
+            background-color: #ea5757;
+            font-size: 30px;
+            color: #ddd;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="box box1">
+              <img src="https://bdu.ac.bd/assets/images/logo/logo1.png" alt="" width="155" height="100">
+            </div>
+            <div class="box box2 tittle">
+              <h2>Bangladesh Digital University(BDU)</h2>
+              <p>Faculty of Digital Transformation Engineering<br>Department of Educational Technology and Engineering(EdTE)
+              </p>
+              <h4>Class Routine of Educational Technology and Engineering(B.Sc.Engg.(EdTE))<br>Effective from Semester July
+                2024</h4>
+            </div>
+            <!-- header start End-->
+          </div>
+        <div id="schedule-container"></div>
+    </div>
+    
+
+    
+
+    <script>
+        async function loadSchedule() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+    
+                const container = document.getElementById('schedule-container');
+    
+                data.schedule.forEach(day => {
+                    const table = document.createElement('table');
+    
+                    // Add day header
+                    const dayHeader = document.createElement('tr');
+                    const dayCell = document.createElement('th');
+                    dayCell.colSpan = 7;
+                    dayCell.className = 'day-header';
+                    dayCell.textContent = day.Day;
+                    dayHeader.appendChild(dayCell);
+                    table.appendChild(dayHeader);
+    
+                    // Add table headers
+                    const headerRow = document.createElement('tr');
+                    ['Session', '8.00-9.50', '10.00-11.50', '12.00-12.50', '1.00-2.50', '3.00-4.50'].forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
+                    table.appendChild(headerRow);
+    
+                    // Add session rows
+                    day.Sessions.forEach(session => {
+                        const row = document.createElement('tr');
+                        
+                        ['Session', '8.00-9.50', '10.00-11.50', '12.00-12.50', '1.00-2.50', '3.00-4.50'].forEach(key => {
+                            const td = document.createElement('td');
+                            const content = session[key] || '';
+                            // Replace newline characters with <br>
+                            td.innerHTML = content.replace(/\n/g, '<br>');
+                            row.appendChild(td);
+                        });
+    
+                        table.appendChild(row);
+                    });
+    
+                    container.appendChild(table);
+                });
+            } catch (error) {
+                console.error('Error loading schedule:', error);
+            }
+        }
+    
+        loadSchedule();
+    </script>
+    <div class="footer container">
+        Developed by: <a href="https://github.com/rony7s">Rony Ahmmed EdTech_Engg</a>
+    </div>
+     
+</body>
+</html>

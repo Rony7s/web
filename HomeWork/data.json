@@ -1,0 +1,229 @@
+{
+    "schedule": [
+        {
+            "Day": "Saturday",
+            "Sessions": [
+                {
+                    "Session": "2023-24",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "ENG 105(NH)\nTutorial Room-1001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "HIS 109(SN)\nTutorial Room-1001",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2022-23",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2021-22",
+                    "8.00-9.50": "CSE 219(AAW)\nTutorial Room-2001",
+                    "10.00-11.50": "ET 215(MRK)\nLecture Room-2001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 217(MRK)\nTutorial Room-2001",
+                    "3.00-4.50": "PROG 212(AH)\nSessional G-1 Room-1201"
+                },
+                {
+                    "Session": "2020-21",
+                    "8.00-9.50": "ICTE 4363(RI)\nLecture Room-4001",
+                    "10.00-11.50": "ICTE 4331(SA)\nLecture Room-4001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ICTE 4332(SA)\nSessional G-1 Room-1202",
+                    "3.00-4.50": "ICTE 4332(SA)\nSessional G-2 Room-1202"
+                },
+                {
+                    "Session": "2019-20",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "",
+                    "3.00-4.50": ""
+                }
+            ]
+        },
+        {
+            "Day": "Sunday",
+            "Sessions": [
+                {
+                    "Session": "2023-24",
+                    "8.00-9.50": "ENG 105(NH)\nLecture Room-1001",
+                    "10.00-11.50": "PROG 101(RS)\nTutorial Room-1001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "",
+                    "3.00-4.50": "HIS 109(SN)\nLecture Room-4001"
+                },
+                {
+                    "Session": "2022-23",
+                    "8.00-9.50": "MATH 217(SCS)\nLecture Room-4001",
+                    "10.00-11.50": "ET 205(ZN)\nLecture Room-4001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "CSE 202(MA)\nSessional G-1 Room-4701\nCSE 204(SA)\nSessional G-2 Room-2701",
+                    "3.00-4.50": "CSE 202(MA)\nSessional G-2 Room-4701\nCSE 204(SA)\nSessional G-1 Room-2701"
+                },
+                {
+                    "Session": "2021-22",
+                    "8.00-9.50": "ET 215(MRK)\nTutorial Room-2001",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 217(MRK)\nLecture Room-4001",
+                    "3.00-4.50": "PROG 211(AH)\nLecture Room-2001"
+                },
+                {
+                    "Session": "2020-21",
+                    "8.00-9.50": "ICTE 4336(FI)\nSessional G-1 Room-2701\nICTE 4364(RI)\nSessional G-2 Room-4701",
+                    "10.00-11.50": "ICTE 4336(FI)\nSessional G-2 Room-2701\nICTE 4364(RI)\nSessional G-1 Room-4701",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ACC 4301(RB)\nTutorial Room-1001",
+                    "3.00-4.50": "ICTE 4333(RB)\nLecture Room-1001"
+                },
+                {
+                    "Session": "2019-20",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "ICTE 4439(MDK)\nLecture Room-2001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ICT 4461(RH)\nLecture Room-2001",
+                    "3.00-4.50": ""
+                }
+            ]
+        },
+        {
+            "Day": "Monday",
+            "Sessions": [
+                {
+                    "Session": "2023-24",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "PROG 101(RS)\nLecture Room-1001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "DS 107(SMRH)\nLecture Room-1001",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2022-23",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "ET 205(ZN)\nTutorial Room-2001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "CSE 201(MA)\nLecture Room-4001",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2021-22",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 214(ZF)\nSessional G-1 Room-2701\nET 218(MRK)\nSessional G-2 Room-4701",
+                    "3.00-4.50": "ET 214(ZF)\nSessional G-2 Room-2701\nET 218(MRK)\nSessional G-1 Room-4701"
+                },
+                {
+                    "Session": "2020-21",
+                    "8.00-9.50": "ICTE 4333(RB)\nTutorial Room-2001",
+                    "10.00-11.50": "ICTE 4335(FI)\nLecture Room-4001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ACC 4301(RB)\nLecture Room-1001",
+                    "3.00-4.50": "ICTE 4363(RI)\nLecture Room-4001"
+                },
+                {
+                    "Session": "2019-20",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "ICT 4462(RH)\nSessional G-2 Room-2701\nICT 4460(AR)\nSessional G-1 Room-4701",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ICT 4461(RH)\nTutorial Room-2001",
+                    "3.00-4.50": "ICT 4459(AR)\nLecture Room-2001"
+                }
+            ]
+        },
+        {
+            "Day": "Tuesday",
+            "Sessions": [
+                {
+                    "Session": "2023-24",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 103(AZ)\nLecture Room-2001",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2022-23",
+                    "8.00-9.50": "CSE 203(SA)\nLecture Room-4001",
+                    "10.00-11.50": "ET 207(ZN)\nLecture Room-4001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 205(ZN)\nTutorial Room-1001",
+                    "3.00-4.50": "CSE 201(MA)\nTutorial Room-4001"
+                },
+                {
+                    "Session": "2021-22",
+                    "8.00-9.50": "PROG 211(AH)\nTutorial Room-1001",
+                    "10.00-11.50": "ET 213(ZF)\nTutorial Room-1001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2020-21",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "ICTE 4335(FI)\nTutorial Room-2001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ICTE 4331(SA)\nTutorial Room-4001",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2019-20",
+                    "8.00-9.50": "ICTE 4439(MDK)\nTutorial Room-2001",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "EDU 4413(ZF)\nLecture Room-2001",
+                    "3.00-4.50": ""
+                }
+            ]
+        },
+        {
+            "Day": "Wednesday",
+            "Sessions": [
+                {
+                    "Session": "2023-24",
+                    "8.00-9.50": "PROG 102(RS)\nSessional G-1 Room-4701\nENG 106(NH)\nSessional G-2 Room-2701",
+                    "10.00-11.50": "PROG 102(RS)\nSessional G-2 Room-4701\nENG 106(NH)\nSessional G-1 Room-2701",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ET 103(AZ)\nTutorial Room-2001",
+                    "3.00-4.50": "DS 107(SMRH)\nTutorial Room-1001"
+                },
+                {
+                    "Session": "2022-23",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "CSE 203(SA)\nTutorial Room-4001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "MATH 217(SCS)",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2021-22",
+                    "8.00-9.50": "ET 213(ZF)\nLecture Room-2001",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "CSE 219(AAW)\nTutorial Room-1001",
+                    "3.00-4.50": "PROG 212(AH)\nSessional G-2 Room-4701"
+                },
+                {
+                    "Session": "2020-21",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "",
+                    "3.00-4.50": ""
+                },
+                {
+                    "Session": "2019-20",
+                    "8.00-9.50": "",
+                    "10.00-11.50": "EDU 4413(ZF)\nTutorial Room-2001",
+                    "12.00-12.50": "",
+                    "1.00-2.50": "ICT 4462(RH)\nSessional G-1 Room-2701\nICT 4460(AR)\nSessional G-2 Room-4701",
+                    "3.00-4.50": "ICT 4459(AR)\nTutorial Room-2001"
+                }
+            ]
+        }
+    ]
+}
