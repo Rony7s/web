@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTE.Engg</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #87CEEB;
+            font-family: Arial, sans-serif;
+            touch-action: manipulation;
+        }
+
+        #gameCanvas {
+            display: block;
+            background: #87CEEB;
+        }
+
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 20px;
+        }
+
+        #angleControls {
+            position: absolute;
+            bottom: 20px;
+            left: 250px;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #fireButton {
+            position: absolute;
+            bottom: 20px;
+            right: 250px;
+            background: rgba(255, 50, 50, 0.5);
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 20px;
+            color: white;
+            border: none;
+        }
+        
+        #powerBar {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20vw; /* 20% of viewport width */
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #powerFill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #4CAF50, #FF5722);
+            transition: width 0.1s;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        #startButton {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="controls">
+        <p>Cannon Angle: <span id="angleDisplay">45</span>°</p>
+        <p>Power: <span id="powerDisplay">50</span>%</p>
+    </div>
+    <div id="score">Score: <span id="scoreValue">0</span></div>
+    
+    <div id="powerBar">
+        <div id="powerFill"></div>
+    </div>
+    
+    <div id="angleControls">
+        <button id="angleDown">-</button>
+        <button id="angleUp">+</button>
+    </div>
+    <button id="fireButton">FIRE!</button>
+    
+    <div id="instructions">
+        <h3>ছবির URL দিন:</h3>
+        <label>
+            <input type="text" name="urlImg" id="imgUrl" placeholder="ছবির URL দিন">
+        </label>
+        <br><br>
+        <button id="startButton">Start Game</button>
+    </div>
+    
+    <div style="display:none;">
+        <img id="flagImage" src="" alt="Flag will appear here" width="200">
+    </div>
+    
+    <script>
+        // Game variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const angleDisplay = document.getElementById('angleDisplay');
+        const powerDisplay = document.getElementById('powerDisplay');
+        const scoreValue = document.getElementById('scoreValue');
+        const startButton = document.getElementById('startButton');
+        const instructions = document.getElementById('instructions');
+        const angleUpBtn = document.getElementById('angleUp');
+        const angleDownBtn = document.getElementById('angleDown');
+        const fireButton = document.getElementById('fireButton');
+        const powerFill = document.getElementById('powerFill');
+        const imgUrlInput = document.getElementById('imgUrl');
+        const image = document.getElementById("flagImage");
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Game objects
+        const cannon = {
+            x: 120,
+            y: canvas.height - 100,
+            width: 100,
+            height: 30,
+            angle: 45,
+            color: '#555'
+        };
+
+        const cannonball = {
+            x: 0,
+            y: 0,
+            radius: 15,
+            color: 'black',
+            velocity: { x: 0, y: 0 },
+            launched: false,
+            gravity: 0.2
+        };
+
+        const target = {
+            x: canvas.width - 150,
+            y: canvas.height - 100,
+            radius: 40,
+            color: 'red',
+            hit: false
+        };
+
+        let explosions = [];
+        let score = 0;
+        let power = 50;
+        let powerIncreasing = true;
+        let gameStarted = false;
+
+        // Initialize game
+        function initGame() {
+            // Set the target image from input
+            const url = imgUrlInput.value.trim();
+            if (url) {
+                image.src = url;
+            } else {
+                // Default image if no URL provided
+                image.src = 'https://via.placeholder.com/200';
+            }
+            
+            // Reset cannonball
+            cannonball.x = cannon.x;
+            cannonball.y = cannon.y;
+            cannonball.velocity = { x: 0, y: 0 };
+            cannonball.launched = false;
+
+            // Reset target
+            target.hit = false;
+            target.x = canvas.width - 150;
+            target.y = canvas.height - 100;
+
+            // Reset explosions
+            explosions = [];
+
+            // Reset power
+            power = 50;
+            powerIncreasing = true;
+            powerFill.style.width = power + '%';
+            powerDisplay.textContent = power;
+
+            score = 0;
+            scoreValue.textContent = score;
+            gameStarted = true;
+            instructions.style.display = 'none';
+        }
+
+        // Start game button
+        startButton.addEventListener('click', initGame);
+
+        // Angle controls
+        angleUpBtn.addEventListener('click', () => {
+            cannon.angle = Math.min(85, cannon.angle + 5);
+            angleDisplay.textContent = cannon.angle;
+        });
+
+        angleDownBtn.addEventListener('click', () => {
+            cannon.angle = Math.max(5, cannon.angle - 5);
+            angleDisplay.textContent = cannon.angle;
+        });
+
+        // Fire button
+        fireButton.addEventListener('click', () => {
+            if (!gameStarted || cannonball.launched) return;
+
+            // Calculate launch velocity based on angle and current power
+            const angleRad = cannon.angle * Math.PI / 180;
+            const force = power / 10; // Scale power to reasonable force
+
+            cannonball.velocity.x = Math.cos(angleRad) * force;
+            cannonball.velocity.y = -Math.sin(angleRad) * force;
+            cannonball.launched = true;
+            cannonball.x = cannon.x + Math.cos(angleRad) * cannon.width;
+            cannonball.y = cannon.y - Math.sin(angleRad) * cannon.width;
+        });
+
+        // Create explosion effect
+        function createExplosion(x, y) {
+            const particles = [];
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    radius: Math.random() * 5 + 2,
+                    color: `hsl(${Math.random() * 30 + 10}, 100%, 50%)`,
+                    velocity: {
+                        x: (Math.random() - 0.5) * 8,
+                        y: (Math.random() - 0.5) * 8
+                    },
+                    life: 100
+                });
+            }
+
+            explosions.push({
+                particles: particles,
+                life: 100
+            });
+        }
+
+        // Draw game objects
+        function draw() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw ground
+            ctx.fillStyle = 'darkgreen';
+            ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+
+            // Draw cannon
+            ctx.save();
+            ctx.translate(cannon.x, cannon.y);
+            
+            // Draw the base of the cannon
+            ctx.fillStyle = cannon.color;
+            ctx.fillRect(-47, -10, 100, 50);
+
+            // Draw the wheels
+            ctx.beginPath();
+            ctx.arc(25, 50, 15, 0, Math.PI * 2);
+            ctx.arc(-20, 50, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Rotate to draw the cannon barrel
+            ctx.rotate(-cannon.angle * Math.PI / 180);
+            ctx.fillStyle = cannon.color;
+            ctx.fillRect(0, -cannon.height / 2, cannon.width, cannon.height);
+            ctx.restore();
+
+            // Draw cannonball if launched
+            if (cannonball.launched) {
+                // Outer green circle
+                ctx.beginPath();
+                ctx.arc(cannonball.x, cannonball.y, cannonball.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "green";
+                ctx.fill();
+                ctx.closePath();
+
+                // Inner red circle (center)
+                ctx.beginPath();
+                ctx.arc(cannonball.x, cannonball.y, cannonball.radius - 6, 0, Math.PI * 2);
+                ctx.fillStyle = "red";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            // Draw target if not hit
+            if (!target.hit && image.complete) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(image, target.x - target.radius, target.y - target.radius, target.radius * 2, target.radius * 2);
+                ctx.restore();
+            }
+
+            // Draw explosions
+            explosions.forEach(explosion => {
+                explosion.particles.forEach(particle => {
+                    ctx.globalAlpha = particle.life / 100;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                    ctx.closePath();
+                });
+            });
+            ctx.globalAlpha = 1;
+        }
+
+        // Update game state
+        function update() {
+            if (!gameStarted) return;
+
+            // Update power bar when cannonball isn't launched
+            if (!cannonball.launched) {
+                if (powerIncreasing) {
+                    power += 1;
+                    if (power >= 100) powerIncreasing = false;
+                } else {
+                    power -= 1;
+                    if (power <= 0) powerIncreasing = true;
+                }
+                powerFill.style.width = power + '%';
+                powerDisplay.textContent = power;
+            }
+
+            // Update cannonball position if launched
+            if (cannonball.launched) {
+                cannonball.velocity.y += cannonball.gravity;
+                cannonball.x += cannonball.velocity.x;
+                cannonball.y += cannonball.velocity.y;
+
+                // Check if cannonball hit the ground
+                if (cannonball.y + cannonball.radius > canvas.height - 40) {
+                    cannonball.y = canvas.height - 40 - cannonball.radius;
+                    cannonball.velocity.y *= -0.5;
+                    cannonball.velocity.x *= 0.8;
+
+                    // Stop cannonball if it's moving very slowly
+                    if (Math.abs(cannonball.velocity.x) < 0.5 && Math.abs(cannonball.velocity.y) < 0.5) {
+                        setTimeout(() => {
+                            cannonball.launched = false;
+                            cannonball.x = cannon.x;
+                            cannonball.y = cannon.y;
+                            cannonball.velocity = { x: 0, y: 0 };
+                        }, 1000);
+                    }
+                }
+
+                // Check if cannonball hit the sides
+                if (cannonball.x - cannonball.radius < 0 || cannonball.x + cannonball.radius > canvas.width) {
+                    cannonball.velocity.x *= -0.8;
+                }
+
+                // Check if cannonball hit the top
+                if (cannonball.y - cannonball.radius < 0) {
+                    cannonball.y = cannonball.radius;
+                    cannonball.velocity.y *= -0.5;
+                }
+
+                // Check collision with target
+                if (!target.hit) {
+                    const dx = cannonball.x - target.x;
+                    const dy = cannonball.y - target.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < cannonball.radius + target.radius) {
+                        target.hit = true;
+                        createExplosion(target.x, target.y);
+                        score += 100;
+                        scoreValue.textContent = score;
+
+                        // Reset target after delay
+                        setTimeout(() => {
+                            target.hit = false;
+                            // Place target at random position
+                            target.x = canvas.width - 150 - Math.random() * 200;
+                            target.y = canvas.height - 100 - Math.random() * 100;
+                        }, 2000);
+                    }
+                }
+            }
+
+            // Update explosions
+            explosions.forEach(explosion => {
+                explosion.life--;
+                explosion.particles.forEach(particle => {
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+                    particle.life--;
+                    particle.radius *= 0.98;
+                });
+            });
+
+            // Remove dead explosions
+            explosions = explosions.filter(explosion => explosion.life > 0);
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game loop
+        gameLoop();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cannon.y = canvas.height - 100;
+            target.y = canvas.height - 100;
+        });
+    </script>
+    <!-- Rony Ahmmed EdTech.Engg -->
+</body>
+</html>
