@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sorting Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .tube {
+            width: 80px;
+            height: 250px;
+            border-bottom: 8px solid #7f8c8d;
+            border-radius: 0 0 10px 10px;
+            background: linear-gradient(to right, #ecf0f1, #bdc3c7);
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .tube::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(to right, transparent 48%, rgba(0, 0, 0, 0.1) 50%, transparent 52%);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .tube:hover {
+            transform: translateY(-5px);
+        }
+
+        .tube.selected {
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.7);
+            transform: scale(1.05);
+        }
+
+        .ball {
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            margin: 3px 0;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .ball::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 20px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 4px;
+        }
+
+        .tube-label {
+            position: absolute;
+            bottom: -25px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .failure {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .moves {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .player-info {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .player-info input {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
+
+        .player-info button {
+            padding: 8px 15px;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                gap: 15px;
+            }
+
+            .tube {
+                width: 70px;
+                height: 200px;
+            }
+
+            .ball {
+                width: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="setup-screen" class="player-info">
+        <h1>Color Sorting Game</h1>
+        <div>
+            <label for="player-name">Your Name:</label>
+            <input type="text" id="player-name" placeholder="Enter your name">
+        </div>
+        <div>
+            <label for="challenge-time">Challenge Time (seconds):</label>
+            <input type="number" id="challenge-time" min="10" max="600" value="60">
+        </div>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <div id="game-screen" style="display: none;">
+        <h1>Color Sorting Game</h1>
+        <div class="player-info">
+            <h2 id="player-display">Player: </h2>
+            <div class="timer">Time Left: <span id="time-left">0</span>s</div>
+            <div class="moves">Moves: <span id="move-count">0</span>/100</div>
+        </div>
+        
+        <div class="game-container" id="game-container">
+            <!-- Tubes will be generated here -->
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="controls">
+            <button id="reset-btn">New Game</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Configuration
+        const COLORS = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6'];
+        const TUBE_COUNT = 5;
+        const BallPerCol = 4;
+        const MAX_BALLS = 6;
+        const MAX_MOVES = 100;
+
+        // Game State
+        let tubes = [];
+        let selectedTube = null;
+        let moves = 0;
+        let playerName = '';
+        let challengeTime = 60;
+        let timeLeft = 0;
+        let gameInterval = null;
+        let gameStartTime = 0;
+
+        // DOM Elements
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const gameContainer = document.getElementById('game-container');
+        const moveCount = document.getElementById('move-count');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const status = document.getElementById('status');
+        const resetBtn = document.getElementById('reset-btn');
+        const startBtn = document.getElementById('start-btn');
+        const playerNameInput = document.getElementById('player-name');
+        const challengeTimeInput = document.getElementById('challenge-time');
+        const playerDisplay = document.getElementById('player-display');
+
+        // Initialize Game
+        function initGame() {
+            tubes = [];
+            selectedTube = null;
+            moves = 0;
+            moveCount.textContent = `${moves}/${MAX_MOVES}`;
+            timeLeft = challengeTime;
+            timeLeftDisplay.textContent = timeLeft;
+            status.style.display = 'none';
+
+            // Create empty tubes
+            for (let i = 0; i < TUBE_COUNT; i++) {
+                tubes.push([]);
+            }
+
+            // Create multiple balls of each color
+            const allBalls = [];
+            for (let color of COLORS) {
+                for (let i = 0; i < BallPerCol; i++) {
+                    allBalls.push(color);
+                }
+            }
+
+            // Shuffle balls
+            for (let i = allBalls.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allBalls[i], allBalls[j]] = [allBalls[j], allBalls[i]];
+            }
+
+            // Distribute balls to tubes
+            for (let i = 0; i < allBalls.length; i++) {
+                tubes[i % TUBE_COUNT].push(allBalls[i]);
+            }
+
+            renderGame();
+            
+            // Start timer
+            gameStartTime = Date.now();
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Update timer
+        function updateTimer() {
+            const elapsedSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
+            timeLeft = Math.max(0, challengeTime - elapsedSeconds);
+            timeLeftDisplay.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                endGame(false, "Time's up! You ran out of time.");
+            }
+        }
+
+        // Render Game
+        function renderGame() {
+            gameContainer.innerHTML = '';
+
+            tubes.forEach((tubeBalls, index) => {
+                const tube = document.createElement('div');
+                tube.className = 'tube';
+                tube.dataset.index = index;
+
+                if (selectedTube === index) {
+                    tube.classList.add('selected');
+                }
+
+                // Add balls
+                tubeBalls.forEach(color => {
+                    const ball = document.createElement('div');
+                    ball.className = 'ball';
+                    ball.style.backgroundColor = color;
+                    tube.appendChild(ball);
+                });
+
+                // Add empty slots for consistent height
+                const emptySlots = MAX_BALLS - tubeBalls.length;
+                for (let i = 0; i < emptySlots; i++) {
+                    const empty = document.createElement('div');
+                    empty.className = 'ball';
+                    empty.style.visibility = 'hidden';
+                    tube.appendChild(empty);
+                }
+
+                // Add tube label
+                const label = document.createElement('div');
+                label.className = 'tube-label';
+                label.textContent = String.fromCharCode(65 + index);
+                tube.appendChild(label);
+
+                tube.addEventListener('click', () => handleTubeClick(index));
+                gameContainer.appendChild(tube);
+            });
+
+            checkWin();
+        }
+
+        // Handle Tube Click
+        function handleTubeClick(index) {
+            if (selectedTube === null) {
+                // Select tube if it has balls
+                if (tubes[index].length > 0) {
+                    selectedTube = index;
+                    renderGame();
+                }
+            } else {
+                // Move ball if different tube is clicked
+                if (selectedTube !== index) {
+                    if (moveBall(selectedTube, index)) {
+                        moves++;
+                        moveCount.textContent = `${moves}/${MAX_MOVES}`;
+                        
+                        if (moves >= MAX_MOVES) {
+                            endGame(false, "Game Over! You used all 100 moves.");
+                            return;
+                        }
+                    }
+                }
+                selectedTube = null;
+                renderGame();
+            }
+        }
+
+        // Move Ball Logic
+        function moveBall(fromIndex, toIndex) {
+            const fromTube = tubes[fromIndex];
+            const toTube = tubes[toIndex];
+
+            // Check if move is valid
+            if (fromTube.length === 0 || toTube.length >= MAX_BALLS) {
+                return false;
+            }
+
+            // Move is allowed
+            toTube.push(fromTube.pop());
+            return true;
+        }
+
+        // Check Win Condition
+        function checkWin() {
+            const isWon = tubes.every(tube => {
+                return tube.length === 0 ||
+                    (tube.every(ball => ball === tube[0]) && tube.length > 0);
+            });
+
+            if (isWon) {
+                const timeUsed = challengeTime - timeLeft;
+                const score = Math.round(((100 - moves) / timeUsed) * 1000);
+                endGame(true, `🎉 You won in ${moves} moves and ${timeUsed} seconds! Score: ${score}`);
+            }
+        }
+
+        // End Game
+        function endGame(isWin, message) {
+            clearInterval(gameInterval);
+            
+            status.textContent = message;
+            status.className = isWin ? 'status success' : 'status failure';
+            status.style.display = 'block';
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', () => {
+            playerName = playerNameInput.value.trim() || 'Player';
+            challengeTime = parseInt(challengeTimeInput.value) || 60;
+            
+            if (challengeTime < 10) {
+                challengeTime = 10;
+                challengeTimeInput.value = 10;
+            } else if (challengeTime > 600) {
+                challengeTime = 600;
+                challengeTimeInput.value = 600;
+            }
+            
+            playerDisplay.textContent = `Player: ${playerName}`;
+            setupScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            initGame();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            setupScreen.style.display = 'block';
+            gameScreen.style.display = 'none';
+            clearInterval(gameInterval);
+        });
+
+        // Initialize setup screen
+        playerNameInput.focus();
+    </script>
+</body>
+</html>
